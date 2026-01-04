@@ -30,7 +30,7 @@ def main():
 
     while controlManager.isRunning():
 
-        controlManager["tabs"]["tab1"]["progressBar"].setValue(callbackVariable[0] % 10.0 / 10.0)
+        controlManager["tabs"]["tab1"]["progressBar"].setValue(callbackVariable[0] % 20.0 / 20.0)
 
         controlManager.update()
 
