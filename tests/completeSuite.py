@@ -61,6 +61,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# TODO!
-# Slider changeValues does maybe not work if currentValue is None?
