@@ -1,7 +1,4 @@
 
-import math
-import numpy as np
-
 import pygame as pg
 from pygame import gfxdraw
 
