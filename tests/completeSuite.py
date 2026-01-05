@@ -46,13 +46,13 @@ def main():
     while controlManager.isRunning():
         plotXValues.append(len(plotXValues))
         plotYValues.append(plotYValues[-1] + randint(-10, 10))
-        controlManager["left"]["plotTop"].addValue(plotXValues[-1], plotYValues[-1], maxLength=1000)
-        controlManager["left"]["plotBot"].setValue(plotXValues, plotYValues, maxLength=1000)
+        controlManager["plotTop"].addValue(plotXValues[-1], plotYValues[-1], maxLength=1000)
+        controlManager["plotBot"].setValue(plotXValues, plotYValues, maxLength=1000)
 
-        controlManager["right"]["text"].setText(f"Render Time: {1000 * controlManager.getRenderTime():.2f} ms")
-        controlManager["right"]["sliderOutput"].setValue(controlManager["right"]["sliderInput"].getValue())
+        controlManager["text"].setText(f"Render Time: {1000 * controlManager.getRenderTime():.2f} ms")
+        controlManager["sliderOutput"].setValue(controlManager["sliderInput"].getValue())
 
-        controlManager["right"]["progressbar"].setValue(controlManager.getIteration() % 1000 / 1000)
+        controlManager["progressbar"].setValue(controlManager.getIteration() % 1000 / 1000)
 
         controlManager.update()
 

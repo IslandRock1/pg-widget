@@ -30,12 +30,32 @@ class Tab(UIGroup):
 
             self[f"button{label}"].overrideOnLeftClick(f, self._activeGroup)
 
+    def __contains__(self, key):
+        # check current level first
+        if key in self._uiGroups:
+            return True
+
+        # recursively check nested UIGroup
+        for elem in self._uiGroups:
+            if isinstance(elem, UIGroup) and key in elem:
+                return True
+
+        return False
+
     def __getitem__(self, item):
         if (item.startswith("tab")):
             tabNr = int(item[3:]) - 1
             return self._uiGroups[tabNr]
-        else:
+        elif (item in self._uiElements):
             return self._uiElements[item]
+        elif (item in self._uiGroups):
+            return self._uiGroups[item]
+        else:
+            for v in self._uiGroups:
+                if (item in v):
+                    return v[item]
+
+        raise KeyError(f"{item} not in UIGroup. I contain {self._uiElements} and {self._uiGroups}")
 
     def __setitem__(self, key, value):
         self._uiElements[key] = value

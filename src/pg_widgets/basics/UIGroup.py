@@ -20,8 +20,26 @@ class UIGroup:
         self._outline = not self._outline
         self._outlineColor = color
 
+    def __contains__(self, key):
+        # check current level first
+        if key in self._uiElements:
+            return True
+
+        # recursively check nested UIGroup
+        for elem in self._uiElements.values():
+            if isinstance(elem, UIGroup) and key in elem:
+                return True
+
+        return False
+
     def __getitem__(self, item):
-        return self._uiElements[item]
+        if (item in self._uiElements):
+            return self._uiElements[item]
+        else:
+            for (k, v) in self._uiElements.items():
+                if (item in v):
+                    return v[item]
+        raise KeyError(f"{item} not in UIGroup. I contain {self._uiElements}")
 
     def __setitem__(self, key, value):
         self._uiElements[key] = value
