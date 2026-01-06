@@ -1,7 +1,7 @@
 
 import pygame as pg
 
-from .Primitives import circle, roundedRect
+from pg_widgets.utils.Primitives import roundedRect
 from .UIElement import UIElement
 
 class TextBox(UIElement):

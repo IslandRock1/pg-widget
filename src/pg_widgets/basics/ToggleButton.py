@@ -1,6 +1,6 @@
 import pygame as pg
 
-from .Primitives import circle, roundedRect
+from pg_widgets.utils.Primitives import circle, roundedRect
 from .UIElement import UIElement
 
 class ToggleButton(UIElement):
