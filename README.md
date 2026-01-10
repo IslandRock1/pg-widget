@@ -9,6 +9,7 @@ It's meant to be very easy to use, requiring very little technical skills. So, s
 
 There are many improvements i want to make to this library. First on the list is probably adding support for changing UI elements at runtime. Aka, when right-clicking, open a settings-box.
 
+* Circular slider/progressbar
 * Easier for UI components to use keyboard presses.
 * onHover function, to let elements react when the mouse is over them.
 * Settings at runtime
