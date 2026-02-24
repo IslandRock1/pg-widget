@@ -9,7 +9,7 @@ from .utils.Lowpass import Lowpass
 class ControlManager:
     def __init__(self):
 
-        self.__size = (1600, 800)
+        self.__size = (1200, 600)
         self.__screen = pg.display.set_mode(self.__size, pg.RESIZABLE)
         self.__uiGroup = UIGroup((0, 0), (1.0, 1.0))
         self.__uiGroup.changeSize(self.__size)
@@ -29,6 +29,9 @@ class ControlManager:
 
     def isRunning(self):
         return self.__running
+
+    def getSize(self):
+        return self.__size
 
     def getIteration(self):
         return self.__iter
