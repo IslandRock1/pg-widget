@@ -1,5 +1,6 @@
 
 import time
+import os
 
 import pygame as pg
 
@@ -16,6 +17,7 @@ class ControlManager:
 
         self.__bgColor = (50, 50, 50)
         self.__running = True
+        self.__isRecording = False
         self.__iter = 0
 
         self.__fpsLowpass = Lowpass(0.9)
@@ -40,6 +42,14 @@ class ControlManager:
         v = self.__fpsLowpass.getValue()
         if (v is None): return -1
         return v
+
+    def startRecording(self):
+        self.__isRecording = True
+        os.makedirs("frames", exist_ok=True)
+        os.makedirs("video", exist_ok=True)
+
+    def stopRecording(self):
+        self.__isRecording = False
 
     def __handleKeyboard(self):
         for event in pg.event.get():
@@ -68,6 +78,9 @@ class ControlManager:
         self.__screen.fill(self.__bgColor)
         self.__screen.blit(self.__uiGroup.render(self.__bgColor), self.__uiGroup.getPos())
         pg.display.flip()
+
+        if (self.__isRecording):
+            pg.image.save(self.__screen, f"frames/frame_{self.__iter}.png")
 
     def update(self):
         t0 = time.perf_counter()
