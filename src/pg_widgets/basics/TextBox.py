@@ -1,15 +1,31 @@
 
+from enum import Enum
+from unittest import case
+
 import pygame as pg
 
 from pg_widgets.utils.Primitives import roundedRect
 from .UIElement import UIElement
 
 class TextBox(UIElement):
+    class AlignmentHorizontal:
+        LEFT = 0
+        MIDDLE = 1
+        RIGHT = 2
+
+    class AlignmentVertical(Enum):
+        TOP = 0
+        MIDDLE = 1
+        BOTTOM = 2
+
     def __init__(self, pos, size = (1.0, 1.0), *, text = ""):
         super().__init__(pos, size)
 
         self._textSize = None
         self._text = text
+
+        self._alignmentHorizontal = self.AlignmentHorizontal.MIDDLE
+        self._alignmentVertical = self.AlignmentVertical.MIDDLE
 
     def changeSize(self, newSize):
         super().changeSize(newSize)
@@ -26,6 +42,16 @@ class TextBox(UIElement):
     def setTextSize(self, size: int):
         self._textSize = int(size)
         self._updateSurf = True
+
+    def setAlignment(self, *, horizontal = None, vertical = None):
+
+        if horizontal is not None:
+            self._alignmentHorizontal = horizontal
+            self._updateSurf = True
+
+        if vertical is not None:
+            self._alignmentVertical = vertical
+            self._updateSurf = True
 
     def _getInfoFromSecondary(self):
         if (len(self._secondaryElements) > 0):
@@ -62,6 +88,22 @@ class TextBox(UIElement):
                 self._textSize -= 1
                 self._updateSurf = True
 
-            self._surf.blit(textSurf, ((w - wText) // 2, (h - hText) // 2))
+            match self._alignmentHorizontal:
+                case self.AlignmentHorizontal.LEFT:
+                    posX = max(1, int(w * 0.01))
+                case self.AlignmentHorizontal.MIDDLE:
+                    posX = (w - wText) // 2
+                case self.AlignmentHorizontal.RIGHT:
+                    posX = min(w - 1, int(w * 0.99))
+
+            match self._alignmentVertical:
+                case self.AlignmentVertical.TOP:
+                    posY = max(1, int(h * 0.01))
+                case self.AlignmentVertical.MIDDLE:
+                    posY = (h - hText) // 2
+                case self.AlignmentVertical.BOTTOM:
+                    posY = min(h - 1, int(h * 0.99))
+
+            self._surf.blit(textSurf, (posX, posY))
 
         return self._surf
