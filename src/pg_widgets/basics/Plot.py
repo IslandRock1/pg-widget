@@ -101,6 +101,10 @@ class Plot(UIElement):
         self._updateSurf = True
 
     def addValue(self, x, y, plotIx: int = 0, maxLength: int = None):
+        while (len(self._x_values) <= plotIx):
+            self._x_values.append([0.0])
+            self._y_values.append([0.0])
+
         self._x_values[plotIx].append(x)
         self._y_values[plotIx].append(y)
 
