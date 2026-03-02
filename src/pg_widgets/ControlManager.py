@@ -2,6 +2,7 @@
 import time
 import os
 
+import numpy as np
 import pygame as pg
 
 from .basics.UIGroup import UIGroup
@@ -18,9 +19,15 @@ class ControlManager:
         self.__bgColor = (50, 50, 50)
         self.__running = True
         self.__isRecording = False
+        self.__writerExist = False
         self.__iter = 0
 
         self.__fpsLowpass = Lowpass(0.9)
+
+    def close(self):
+
+        if (self.__writerExist):
+            self.__writer.close()
 
     def __getitem__(self, item):
         return self.__uiGroup[item]
@@ -43,10 +50,18 @@ class ControlManager:
         if (v is None): return -1
         return v
 
+    def screenshot(self):
+        os.makedirs("screenshots", exist_ok=True)
+        pg.image.save(self.__screen, f"screenshots/frame_{self.__iter}.png")
+
     def startRecording(self):
         self.__isRecording = True
         os.makedirs("frames", exist_ok=True)
         os.makedirs("video", exist_ok=True)
+
+        import imageio
+        self.__writerExist = True
+        self.__writer = imageio.get_writer(f"video/{time.perf_counter()}.mp4", fps=60)
 
     def stopRecording(self):
         self.__isRecording = False
@@ -58,6 +73,15 @@ class ControlManager:
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.__running = False
+
+                elif event.key == pg.K_r:
+                    self.startRecording()
+
+                elif event.key == pg.K_f:
+                    self.stopRecording()
+
+                elif event.key == pg.K_s:
+                    self.screenshot()
 
         w, h = pg.display.get_window_size()
         if (w != self.__size[0]) or (h != self.__size[1]):
@@ -80,7 +104,9 @@ class ControlManager:
         pg.display.flip()
 
         if (self.__isRecording):
-            pg.image.save(self.__screen, f"frames/frame_{self.__iter}.png")
+            frame = pg.surfarray.array3d(self.__screen)
+            frame = np.transpose(frame, (1, 0, 2))
+            self.__writer.append_data(frame)
 
     def update(self):
         t0 = time.perf_counter()
