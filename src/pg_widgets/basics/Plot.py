@@ -35,6 +35,13 @@ class Plot(UIElement):
         self._x_label: str = ""
         self._y_label: str = ""
 
+        self.setColor("plot0", (0, 255, 42))
+        self.setColor("plot1", (14, 194, 44))
+        self.setColor("plot2", (20, 168, 45))
+        self.setColor("plot3", (20, 168, 77))
+        self.setColor("plot4", (20, 168, 121))
+        self.setColor("plot5", (16, 178, 181))
+
     def changeSize(self, newSize):
         super().changeSize(newSize)
 
@@ -241,9 +248,9 @@ class Plot(UIElement):
 
             self._surf = self._surfBase.copy()
             pixelPos = self._getPixelPos()
-            for points in pixelPos:
+            for plotIx, points in enumerate(pixelPos):
                 if (len(points) > 2):
-                    pg.draw.aalines(self._surf, (0,0,0), False, points)
+                    pg.draw.aalines(self._surf, self._getColor(f"plot{plotIx}"), False, points)
 
             self._textItAbsolute(self._surf, str(self._x_low), self._min_px, self._max_py + self._min_py // 2)
             self._textItAbsolute(self._surf, str(self._x_low + self._dx), self._max_px, self._max_py + self._min_py // 2)
