@@ -74,15 +74,6 @@ class ControlManager:
                 if event.key == pg.K_ESCAPE:
                     self.__running = False
 
-                # elif event.key == pg.K_r:
-                #     self.startRecording()
-                #
-                # elif event.key == pg.K_f:
-                #     self.stopRecording()
-                #
-                # elif event.key == pg.K_s:
-                #     self.screenshot()
-
             self.__uiGroup.updateKeyboard(event)
 
         w, h = pg.display.get_window_size()
@@ -95,8 +86,7 @@ class ControlManager:
         pressed = pg.mouse.get_pressed()
         pos = pg.mouse.get_pos()
 
-        elementGotSelected = self.__uiGroup.update(pressed, pos)
-        if elementGotSelected: self.__uiGroup.deSelect()
+        self.__uiGroup.update(pressed, pos)
 
     def __informationControl(self):
         pass
