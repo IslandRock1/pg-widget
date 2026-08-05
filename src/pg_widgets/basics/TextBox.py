@@ -2,6 +2,7 @@
 from enum import Enum
 from unittest import case
 
+import pygame
 import pygame as pg
 
 from pg_widgets.utils.Primitives import roundedRect
@@ -57,6 +58,26 @@ class TextBox(UIElement):
         if (len(self._secondaryElements) > 0):
             self._textSize = int(self._secondaryElements[0].getValue())
             self._updateSurf = True
+
+    def updateKeyboard(self, event: pg.event.Event):
+        if not self._isSelected: return
+        if (event.type != pg.KEYDOWN): return
+        self._updateSurf = True
+
+        if (event.mod == pg.KMOD_NONE) or (event.mod == pg.KMOD_NUM):
+            if (event.key == pg.K_BACKSPACE):
+                if (len(self._text) > 0):
+                    self._text = self._text[:-1]
+
+            elif (event.key == pg.K_SPACE):
+                self._text += " "
+
+            else:
+                self._text += pg.key.name(event.key)
+        else:
+            print(f"Mod: {event.mod}")
+            if (event.mod & pygame.KMOD_CTRL) and (event.key == pg.K_BACKSPACE):
+                self._text = ""
 
     def render(self, bgColor = (0, 0, 0)):
         if (self._updateSurfBase):
