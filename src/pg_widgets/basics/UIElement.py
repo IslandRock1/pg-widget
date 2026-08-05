@@ -26,6 +26,7 @@ class UIElement:
         self._leftPressShadow: bool = False
         self._rightPressShadow: bool = False
 
+        self._isSelectable: bool = True
         self._isSelected: bool = False
 
         self._colors = {
@@ -166,7 +167,7 @@ class UIElement:
             self._secondaryElements = []
 
         if any(mousePress) and any(collisions):
-            self._isSelected = True
+            self._isSelected = True and self._isSelectable
             self._updateSurf = True
         elif any(mousePress):
             self._isSelected = False

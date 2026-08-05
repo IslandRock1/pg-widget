@@ -7,6 +7,8 @@ class Button(TextBox):
         self._callbackFunction = lambda x: None
         self._callbackVariable = None
 
+        self._isSelectable = False
+
     def setFunction(self, callbackFunction):
         self._callbackFunction = callbackFunction
 
@@ -15,5 +17,4 @@ class Button(TextBox):
 
     def _leftClick(self, mousePress, mousePos):
         super()._leftClick(mousePress, mousePos)
-
         self._callbackFunction(self._callbackVariable)
