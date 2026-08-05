@@ -1,6 +1,5 @@
 import pygame as pg
 
-
 class UIGroup:
     def __init__(self, pos, size = (1.0, 1.0)):
         self._pos = pos
@@ -67,11 +66,24 @@ class UIGroup:
             out[k] = v.getValue()
         return out
 
+    def deSelect(self):
+        for (id, element) in self._uiElements.items():
+            element.deSelect()
+
+    def updateKeyboard(self, event):
+        for (id, element) in self._uiElements.items():
+            element.updateKeyboard(event)
+
     def update(self, mousePress, mousePos):
+        elementDidGetSelected = False
+
         for (id, element) in self._uiElements.items():
             x, y = mousePos
             dx, dy = self._parentSize[0] * self._pos[0], self._parentSize[1] * self._pos[1]
-            element.update(mousePress, (x - dx, y - dy))
+            b = element.update(mousePress, (x - dx, y - dy))
+            if b: elementDidGetSelected = True
+
+        return elementDidGetSelected
 
     def render(self, bgColor, debug: bool = False):
         x = self._parentSize[0] * self._size[0]

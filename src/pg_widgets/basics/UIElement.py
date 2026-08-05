@@ -23,8 +23,11 @@ class UIElement:
         self._isRightClick: bool = False
         self._isPress: bool = False
 
-        self._leftPressShadow = False
-        self._rightPressShadow = False
+        self._leftPressShadow: bool = False
+        self._rightPressShadow: bool = False
+
+        self._isSelected: bool = False
+        self._isSelectedShadow: bool = False
 
         self._colors = {
             "bgColor": (200, 200, 200),
@@ -138,6 +141,16 @@ class UIElement:
         if (x > px + dx) or (y > py + dy): return False
         return True
 
+    def deSelect(self):
+        if not self.didGetSelected():
+            self._isSelected = False
+
+    def didGetSelected(self):
+        return self._isSelected and not self._isSelectedShadow
+
+    def updateKeyboard(self, event: pg.event.Event):
+        pass
+
     def update(self, mousePress: tuple[bool, bool, bool], mousePos: tuple[float, float], debug: bool = False, depth: int = 0):
         self._getInfoFromSecondary()
 
@@ -186,3 +199,7 @@ class UIElement:
 
         self._leftPressShadow = mousePress[0]
         self._rightPressShadow = mousePress[2]
+
+        self._isSelectedShadow = self._isSelected
+        self._isSelected = self._isSelected or self._isLeftClick
+        return self.didGetSelected()
