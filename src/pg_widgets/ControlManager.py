@@ -70,9 +70,11 @@ class ControlManager:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.__running = False
+                return
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.__running = False
+                    return
 
             self.__uiGroup.updateKeyboard(event)
 
