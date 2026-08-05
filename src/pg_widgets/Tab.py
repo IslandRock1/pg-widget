@@ -68,6 +68,14 @@ class Tab(UIGroup):
     def getActiveTab(self):
         return self._activeGroup[0]
 
+    def updateKeyboard(self, event):
+        # for (id, element) in self._uiElements.items():
+        #     element.updateKeyboard(event)
+
+        for group in self._uiGroups:
+            for (id, element) in group._uiElements.items():
+                element.updateKeyboard(event)
+
     def update(self, mousePress, mousePos):
         super().update(mousePress, mousePos)
         self._uiGroups[self._activeGroup[0]].update(mousePress, mousePos)
