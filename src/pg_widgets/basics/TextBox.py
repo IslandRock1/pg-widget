@@ -1,6 +1,6 @@
 
 from enum import Enum
-from unittest import case
+from time import perf_counter
 
 import pygame
 import pygame as pg
@@ -19,11 +19,14 @@ class TextBox(UIElement):
         MIDDLE = 1
         BOTTOM = 2
 
-    def __init__(self, pos, size = (1.0, 1.0), *, text = ""):
+    def __init__(self, pos, size = (1.0, 1.0)):
         super().__init__(pos, size)
 
         self._textSize = None
-        self._text = text
+        self._text = ""
+
+        self._timeOfUnderscoreSwitch = perf_counter()
+        self._addUnderScore = False
 
         self._alignmentHorizontal = self.AlignmentHorizontal.MIDDLE
         self._alignmentVertical = self.AlignmentVertical.MIDDLE
@@ -64,7 +67,11 @@ class TextBox(UIElement):
         if (event.type != pg.KEYDOWN): return
         self._updateSurf = True
 
-        if (event.mod == pg.KMOD_NONE) or (event.mod == pg.KMOD_NUM):
+        if event.key == pg.K_RETURN:
+            self._isSelected = False
+            return
+
+        if (event.mod & pg.KMOD_NONE) or (event.mod & pg.KMOD_NUM) or (event.mod & pg.KMOD_SHIFT) or (event.mod & pg.KMOD_ALT):
             if (event.key == pg.K_BACKSPACE):
                 if (len(self._text) > 0):
                     self._text = self._text[:-1]
@@ -73,13 +80,40 @@ class TextBox(UIElement):
                 self._text += " "
 
             else:
-                self._text += pg.key.name(event.key)
+                if (event.key in [pg.K_LSHIFT, pg.K_LALT, pg.K_RALT, pg.K_LCTRL, pg.K_RCTRL]): return
+
+                if (event.key == pg.K_PLUS) and (event.mod & pg.KMOD_SHIFT):
+                    self._text += "?"
+                    return
+
+                out = pg.key.name(event.key)
+                if (event.mod & pg.KMOD_SHIFT):
+                    if out.isalpha():
+                        out = out.upper()
+                    elif out.isnumeric():
+                        out = '=!"#¤%&/()'[int(out)]
+
+                if (event.mod & pg.KMOD_ALT):
+                    if out.isnumeric():
+                        out = " @£$€ {[]}"[int(out)]
+
+                self._text += out
         else:
-            print(f"Mod: {event.mod}")
-            if (event.mod & pygame.KMOD_CTRL) and (event.key == pg.K_BACKSPACE):
+            if (event.mod & pg.KMOD_CTRL) and (event.key == pg.K_BACKSPACE):
                 self._text = ""
 
+            else:
+                self._text = "Invalid?"
+
     def render(self, bgColor = (0, 0, 0)):
+        if (self._isSelected):
+            tNow = perf_counter()
+            if (tNow - self._timeOfUnderscoreSwitch) > 0.3:
+                self._timeOfUnderscoreSwitch = tNow
+
+                self._addUnderScore = not self._addUnderScore
+                self._updateSurf = True
+
         if (self._updateSurfBase):
             self._updateSurfBase = False
 
@@ -101,7 +135,7 @@ class TextBox(UIElement):
             self._updateSurf = False
 
             self._surf = self._surfBase.copy()
-            textSurf = self._getFont(self._textSize).render(self._text, True, self._getColor("textColor"), self._colors["textBgColor"])
+            textSurf = self._getFont(self._textSize).render(self._text + "_" * self._addUnderScore * self._isSelected, True, self._getColor("textColor"), self._colors["textBgColor"])
             wText, hText = textSurf.get_rect().size
             w, h = self._parentSize[0] * self._size[0], self._parentSize[1] * self._size[1]
 
