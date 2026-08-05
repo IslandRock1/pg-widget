@@ -33,6 +33,10 @@ class TuningSliders(UIGroup):
             else:
                 self[nameL].setText(f"{label}: 0.0")
 
+        for (l, v) in zip(self._labels, self.getValue()):
+            self[f"text{l}"].setText(f"{l}")
+            self[f"value{l}"].setText(f"{v:.2f}")
+
     def getValue(self):
         out = []
         for label in self._labels:
@@ -40,8 +44,19 @@ class TuningSliders(UIGroup):
         return out
 
     def update(self, mousePress, mousePos):
+        preValues = self.getValue()
         super().update(mousePress, mousePos)
 
-        for (l, v) in zip(self._labels, self.getValue()):
-            self[f"text{l}"].setText(f"{l}:")
-            self[f"value{l}"].setText(f"{v:.2f}")
+        texts = [self[f"value{l}"].getText() for l in self._labels]
+        for ix, (l, v, pre, text) in enumerate(zip(self._labels, self.getValue(), preValues, texts)):
+            if (self[f"value{l}"]._isSelected):
+                continue
+
+            if (float(text) != v):
+                self[f"text{l}"].setText(f"{l}")
+                self[f"value{l}"].setText(f"{float(text):.2f}")
+                self[f"slider{l}"].setValue(float(text))
+
+            if (pre != v):
+                self[f"text{l}"].setText(f"{l}")
+                self[f"value{l}"].setText(f"{v:.2f}")
