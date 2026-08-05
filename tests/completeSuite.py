@@ -56,6 +56,8 @@ def main():
 
         controlManager.update()
 
+    controlManager.close()
+
 
 if __name__ == "__main__":
     main()
