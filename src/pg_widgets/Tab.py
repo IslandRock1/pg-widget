@@ -6,7 +6,7 @@ from .basics.TextBox import TextBox
 from .basics.UIGroup import UIGroup
 
 class Tab(UIGroup):
-    def __init__(self, pos, size = (1.0, 1.0), uiElements: list[UIElement] = []):
+    def __init__(self, pos, size = (1.0, 1.0), uiElements: list[UIElement] = [], names: list[str] = None):
         super().__init__(pos, size)
         self._numTabs = len(uiElements)
 
@@ -23,7 +23,7 @@ class Tab(UIGroup):
             label = str(i + 1)
 
             self[f"button{label}"]: UIElement = TextBox((xPosBase + xSize * i, yPosBase), (xSize, ySize))
-            self[f"button{label}"].setText(label)
+            self[f"button{label}"].setText(names[i] if names else label)
             self[f"button{label}"].disableSelection()
 
             def f(activeGroup, idx = i):

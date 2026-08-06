@@ -26,7 +26,7 @@ def main():
     tab2["colorPicker"] = pw.ColorPicker((0.0, 0.3), (0.5, 0.6))
     tab2["tuningSliders"] = pw.TuningSliders((0.5, 0.3), (0.5, 0.6), labels=["Tune1", "Tune2", "Tune3", "Tune4", "Tune5"])
 
-    controlManager["tabs"] = pw.Tab((0, 0), uiElements=[tab1, tab2])
+    controlManager["tabs"] = pw.Tab((0, 0), uiElements=[tab1, tab2], names=["Tab 1", "Tab 2"])
 
     while controlManager.isRunning():
 
