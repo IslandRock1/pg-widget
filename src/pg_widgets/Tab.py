@@ -24,6 +24,7 @@ class Tab(UIGroup):
 
             self[f"button{label}"]: UIElement = TextBox((xPosBase + xSize * i, yPosBase), (xSize, ySize))
             self[f"button{label}"].setText(label)
+            self[f"button{label}"].disableSelection()
 
             def f(activeGroup, idx = i):
                 activeGroup[0] = idx

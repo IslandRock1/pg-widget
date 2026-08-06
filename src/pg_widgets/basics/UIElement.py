@@ -58,6 +58,12 @@ class UIElement:
         b["main"] = cls((0, 0), (0, 0))
         return b
 
+    def enableSelection(self):
+        self._isSelectable = True
+
+    def disableSelection(self):
+        self._isSelectable = False
+
     def setValue(self, val):
         pass
 
