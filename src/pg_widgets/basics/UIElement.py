@@ -173,11 +173,11 @@ class UIElement:
             self._secondaryElements = []
 
         if any(mousePress) and any(collisions):
+            if (not self._isSelected): self._updateSurf = True
             self._isSelected = True and self._isSelectable
-            self._updateSurf = True
         elif any(mousePress):
+            if (self._isSelected): self._updateSurf = True
             self._isSelected = False
-            self._updateSurf = True
 
         if (notCollide):
             self._leftPressShadow = mousePress[0]
