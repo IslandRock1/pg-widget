@@ -35,8 +35,9 @@ class Plot(UIElement):
         self._x_label: str = ""
         self._y_label: str = ""
 
+        self.setColor("bgColor", (36, 35, 33))
         self.setColor("plot0", (0, 255, 0))
-        self.setColor("plot1", (0, 0, 255))
+        self.setColor("plot1", (0, 247, 255))
 
     def changeSize(self, newSize):
         super().changeSize(newSize)
