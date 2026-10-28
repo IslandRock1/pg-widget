@@ -90,6 +90,10 @@ class TextBox(UIElement):
                     self._text += ":"
                     return
 
+                if (event.key == pg.K_MINUS) and (event.mod & pg.KMOD_SHIFT):
+                    self._text += "_"
+                    return
+
                 out = pg.key.name(event.key)
                 if (event.mod & pg.KMOD_SHIFT):
                     if out.isalpha():
